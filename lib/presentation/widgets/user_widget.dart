@@ -13,16 +13,18 @@ class UserWidget extends StatefulWidget {
 }
 
 class _UserWidgetState extends State<UserWidget> {
+  bool hasImageSelected = false;
+
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          padding: const EdgeInsets.all(15),
           child: Column(
             children: [
               Container(
-                // padding: const EdgeInsets.all(7),
-                margin: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(15)),
                     color: Colors.white,
@@ -42,7 +44,79 @@ class _UserWidgetState extends State<UserWidget> {
                   trailing: IconButton(
                     icon: const Icon(Icons.menu),
                     onPressed: () {},
+                    color: Colors.brown,
                   ),
+                ),
+              ),
+              Container(
+                  margin: const EdgeInsets.only(top: 30),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 4,
+                          offset:
+                              const Offset(0, 4), // changes position of shadow
+                        ),
+                      ]),
+                  child: hasImageSelected
+                      ? SizedBox(
+                          width: width,
+                          height: width,
+                          child: Center(child: Image.asset('assets/logo.png')))
+                      : SizedBox(
+                          width: width,
+                          height: width,
+                          child: Center(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.image_rounded,
+                                size: 100,
+                                color: Colors.brown.shade100,
+                              ),
+                              const Text(
+                                'No Image is selected',
+                                style: TextStyle(fontSize: 21),
+                              ),
+                            ],
+                          )))),
+              Container(
+                margin: const EdgeInsets.only(top: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: width / 2.3,
+                      height: 50,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7),
+                          ))),
+                          child: const Text('Select from gallery'),
+                          onPressed: () {}),
+                    ),
+                    SizedBox(
+                      width: width / 2.3,
+                      height: 50,
+                      child: OutlinedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7),
+                          ))),
+                          child: const Text('Reset'),
+                          onPressed: () {}),
+                    ),
+                  ],
                 ),
               )
             ],
