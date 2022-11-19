@@ -43,7 +43,44 @@ class _UserWidgetState extends State<UserWidget> {
                   subtitle: Text(widget.identity.email),
                   trailing: IconButton(
                     icon: const Icon(Icons.menu),
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                              height: 200,
+                              child: Column(children: [
+                                MaterialButton(
+                                  minWidth: width,
+                                  height: 48,
+                                  onPressed: () {},
+                                  child: const Text('Home'),
+                                ),
+                                MaterialButton(
+                                  minWidth: width,
+                                  height: 48,
+                                  onPressed: () {},
+                                  child: const Text('About'),
+                                ),
+                                MaterialButton(
+                                  minWidth: width,
+                                  height: 48,
+                                  onPressed: () {},
+                                  child: const Text('Test History'),
+                                ),
+                                MaterialButton(
+                                  minWidth: width,
+                                  height: 48,
+                                  onPressed: () {},
+                                  child: const Text('Sign out'),
+                                ),
+                              ]),
+                            );
+                          });
+                    },
                     color: Colors.brown,
                   ),
                 ),
@@ -118,7 +155,7 @@ class _UserWidgetState extends State<UserWidget> {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
