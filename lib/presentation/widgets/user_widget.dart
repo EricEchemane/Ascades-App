@@ -83,6 +83,16 @@ class _UserWidgetState extends State<UserWidget> {
     classifyImage();
   }
 
+  Future pickFromcamera() async {
+    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    if (photo == null) return;
+    setState(() {
+      _selectedImage = photo;
+      hasImageSelected = true;
+    });
+    classifyImage();
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -200,8 +210,9 @@ class _UserWidgetState extends State<UserWidget> {
                   ? const Padding(
                       padding: EdgeInsets.all(9.0),
                       child: Text(
-                        'Seems like the image is not skin 🤔',
+                        'Seems like the image is not skin 🤔. Try another.',
                         style: TextStyle(fontSize: 18),
+                        textAlign: TextAlign.center,
                       ),
                     )
                   : Container(),
@@ -244,18 +255,34 @@ class _UserWidgetState extends State<UserWidget> {
                     SizedBox(
                       width: width / 2.3,
                       height: 50,
-                      child: OutlinedButton(
+                      child: ElevatedButton(
                           style: ButtonStyle(
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(7),
                           ))),
-                          child: const Text('Reset'),
-                          onPressed: clearImage),
+                          child: const Text('Capture from camera'),
+                          onPressed: pickFromcamera),
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: width,
+                height: 50,
+                child: OutlinedButton(
+                    style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(7),
+                    ))),
+                    child: const Text('Reset'),
+                    onPressed: clearImage),
               ),
             ],
           ),
