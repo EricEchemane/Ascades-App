@@ -6,8 +6,10 @@ import 'package:tflite/tflite.dart';
 
 class UserWidget extends StatefulWidget {
   final GoogleSignInAccount user;
+  final void Function() signOut;
 
-  const UserWidget({Key? key, required this.user}) : super(key: key);
+  const UserWidget({Key? key, required this.user, required this.signOut})
+      : super(key: key);
 
   @override
   State<UserWidget> createState() => _UserWidgetState();
@@ -137,8 +139,8 @@ class _UserWidgetState extends State<UserWidget> {
                                 MaterialButton(
                                   minWidth: width,
                                   height: 48,
-                                  onPressed: () {},
                                   child: const Text('Sign out'),
+                                  onPressed: widget.signOut,
                                 ),
                               ]),
                             );

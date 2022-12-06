@@ -18,29 +18,42 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _googleSignIn.onCurrentUserChanged.listen((account) async {
+    _googleSignIn.onCurrentUserChanged.listen((account) {
       _identity = account;
     });
-    _googleSignIn.signInSilently();
+    signIn();
     super.initState();
   }
 
   Future signIn() async {
     try {
-      await _googleSignIn.signIn();
+      final account = await _googleSignIn.signIn();
+      if (account != null) {
+        setState(() {
+          _identity = account;
+        });
+      }
     } catch (e) {
       debugPrint(e.toString());
     }
   }
 
   signOut() {
-    _googleSignIn.disconnect();
+    _googleSignIn.signOut().then((value) {
+      setState(() {
+        _identity = null;
+      });
+      Navigator.pop(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return _identity != null
-        ? UserWidget(user: _identity!)
+        ? UserWidget(
+            user: _identity!,
+            signOut: signOut,
+          )
         : Scaffold(
             appBar: AppBar(
               systemOverlayStyle: const SystemUiOverlayStyle(
