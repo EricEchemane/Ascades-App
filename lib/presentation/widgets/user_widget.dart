@@ -214,7 +214,7 @@ class _UserWidgetState extends State<UserWidget> {
                   ? Padding(
                       padding: const EdgeInsets.all(9.0),
                       child: Text(
-                        'Accuracy: ${_output["confidence"] * 100}%',
+                        'Accuracy: ${(_output["confidence"] * 100).toStringAsFixed(2)}%',
                         style: const TextStyle(fontSize: 18),
                       ),
                     )
