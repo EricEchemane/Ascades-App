@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,14 +20,20 @@ class _UserWidgetState extends State<UserWidget> {
   dynamic _output;
   bool notRecognized = false;
 
-  @override
-  void initState() {
-    super.initState();
-    loadModel();
-  }
-
   classifyImage() async {
+    await loadSkinOrNotSkinModel();
     var output = await Tflite.runModelOnImage(path: _selectedImage!.path);
+
+    if (output != null && output[0]["label"] == 'not_skin') {
+      setState(() {
+        notRecognized = true;
+        _output = null;
+      });
+      return;
+    }
+
+    await loadMainModel();
+    output = await Tflite.runModelOnImage(path: _selectedImage!.path);
 
     setState(() {
       _output = output?[0];
@@ -36,10 +41,17 @@ class _UserWidgetState extends State<UserWidget> {
     });
   }
 
-  loadModel() async {
+  loadMainModel() async {
     await Tflite.loadModel(
       model: "assets/models/skin_cancer.tflite",
       labels: "assets/labels/skin_cancer.txt",
+    );
+  }
+
+  loadSkinOrNotSkinModel() async {
+    await Tflite.loadModel(
+      model: "assets/models/skin_or_not_skin.tflite",
+      labels: "assets/labels/skin_or_not_skin.txt",
     );
   }
 
@@ -54,6 +66,7 @@ class _UserWidgetState extends State<UserWidget> {
       _selectedImage = null;
       _output = null;
       hasImageSelected = false;
+      notRecognized = false;
     });
   }
 
@@ -179,6 +192,15 @@ class _UserWidgetState extends State<UserWidget> {
               const SizedBox(
                 height: 20,
               ),
+              notRecognized == true
+                  ? const Padding(
+                      padding: EdgeInsets.all(9.0),
+                      child: Text(
+                        'Seems like the image is not skin 🤔',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    )
+                  : Container(),
               _output != null
                   ? Padding(
                       padding: const EdgeInsets.all(9.0),
