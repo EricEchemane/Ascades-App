@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ascades/constants/skin_cancers.dart';
 import 'package:ascades/presentation/screens/about_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,6 +18,7 @@ class _UserWidgetState extends State<UserWidget> {
   XFile? _selectedImage;
   dynamic _output;
   bool notRecognized = false;
+  SkinCancer? _skinCancer;
 
   classifyImage() async {
     await loadSkinOrNotSkinModel();
@@ -36,6 +38,7 @@ class _UserWidgetState extends State<UserWidget> {
     setState(() {
       _output = output?[0];
       notRecognized = false;
+      _skinCancer = skinCancers[_output["label"]];
     });
   }
 
@@ -183,22 +186,43 @@ class _UserWidgetState extends State<UserWidget> {
                       ),
                     )
                   : Container(),
-              _output != null
-                  ? Padding(
-                      padding: const EdgeInsets.all(9.0),
-                      child: Text(
-                        'Skin Cancer: ${_output["label"]}',
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                    )
-                  : Container(),
-              _output != null
-                  ? Padding(
-                      padding: const EdgeInsets.all(9.0),
-                      child: Text(
-                        'Accuracy: ${(_output["confidence"] * 100).toStringAsFixed(2)}%',
-                        style: const TextStyle(fontSize: 18),
-                      ),
+              (_output != null && _skinCancer != null)
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Text(
+                            'Skin Cancer: ${_skinCancer?.cancerName}',
+                            style: const TextStyle(fontSize: 16),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Text(
+                            'Accuracy: ${(_output["confidence"] * 100).toStringAsFixed(2)}%',
+                            style: const TextStyle(fontSize: 16),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Text(
+                            '${_skinCancer?.description}',
+                            style: const TextStyle(fontSize: 16),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Text(
+                            '${_skinCancer?.recommendation}',
+                            style: const TextStyle(fontSize: 16),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                      ],
                     )
                   : Container(),
               Container(
