@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SignInWidget extends StatelessWidget {
   final VoidCallback signIn;
 
-  const SignInWidget({super.key, required this.signIn});
+  const SignInWidget({Key? key, required this.signIn}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

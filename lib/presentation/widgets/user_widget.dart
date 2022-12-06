@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 class UserWidget extends StatefulWidget {
   final GoogleSignInAccount user;
 
-  const UserWidget({super.key, required this.user});
+  const UserWidget({Key? key, required this.user}) : super(key: key);
 
   @override
   State<UserWidget> createState() => _UserWidgetState();
