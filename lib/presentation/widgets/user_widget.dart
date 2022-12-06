@@ -1,9 +1,8 @@
-import 'package:ascades/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class UserWidget extends StatefulWidget {
-  final User user;
+  final GoogleSignInAccount user;
   final GoogleSignInAccount identity;
 
   const UserWidget({super.key, required this.user, required this.identity});
@@ -18,6 +17,7 @@ class _UserWidgetState extends State<UserWidget> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -51,8 +51,11 @@ class _UserWidgetState extends State<UserWidget> {
                           ),
                           builder: (BuildContext context) {
                             return SizedBox(
-                              height: 200,
+                              height: 160,
                               child: Column(children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
                                 MaterialButton(
                                   minWidth: width,
                                   height: 48,
@@ -64,12 +67,6 @@ class _UserWidgetState extends State<UserWidget> {
                                   height: 48,
                                   onPressed: () {},
                                   child: const Text('About'),
-                                ),
-                                MaterialButton(
-                                  minWidth: width,
-                                  height: 48,
-                                  onPressed: () {},
-                                  child: const Text('Test History'),
                                 ),
                                 MaterialButton(
                                   minWidth: width,

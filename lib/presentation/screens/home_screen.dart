@@ -1,7 +1,5 @@
-import 'package:ascades/model/user_model.dart';
 import 'package:ascades/presentation/widgets/sign_in_widget.dart';
 import 'package:ascades/presentation/widgets/user_widget.dart';
-import 'package:ascades/services/network_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -17,26 +15,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   GoogleSignInAccount? _identity;
-  User? _currentUser;
 
   @override
   void initState() {
     _googleSignIn.onCurrentUserChanged.listen((account) async {
       if (account == null) return;
       _identity = account;
-
-      final response = await NetworkService.getUser(account.email);
-      if (response == null || response.statusCode == 404) {
-        // navigate to create account screen
-        return;
-      }
-
-      User user = User();
-      user.fromJson(response.body);
-
-      setState(() {
-        _currentUser = user;
-      });
     });
     _googleSignIn.signInSilently();
     super.initState();
@@ -56,9 +40,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isAuthenticated = _currentUser != null;
+    bool isAuthenticated = _identity != null;
     return isAuthenticated
-        ? UserWidget(user: _currentUser!, identity: _identity!)
+        ? UserWidget(user: _identity!, identity: _identity!)
         : Scaffold(
             appBar: AppBar(
               systemOverlayStyle: const SystemUiOverlayStyle(
