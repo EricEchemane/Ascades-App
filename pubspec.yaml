@@ -39,7 +39,7 @@ dependencies:
   google_sign_in: ^5.4.2
   http: ^0.13.5
   image_picker: ^0.8.6
-  tflite: ^1.1.2
+  tflite_flutter: ^0.9.0
 
 dev_dependencies:
   flutter_test:
