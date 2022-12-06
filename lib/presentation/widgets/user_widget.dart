@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,22 +28,12 @@ class _UserWidgetState extends State<UserWidget> {
   }
 
   classifyImage() async {
-    var output = await Tflite.runModelOnImage(
-      path: _selectedImage!.path,
-      // imageMean: 0.0, // defaults to 117.0
-      // imageStd: 255.0, // defaults to 1.0
-      // numResults: 2, // defaults to 5
-      // threshold: 0.2, // defaults to 0.1
-    );
-    String label = output?[0]["label"];
-    double confidence = output?[0]["confidence"];
+    var output = await Tflite.runModelOnImage(path: _selectedImage!.path);
 
-    print(label);
-    print(confidence);
-    // setState(() {
-    //   _output = output?[0];
-    //   notRecognized = false;
-    // });
+    setState(() {
+      _output = output?[0];
+      notRecognized = false;
+    });
   }
 
   loadModel() async {
@@ -61,6 +53,7 @@ class _UserWidgetState extends State<UserWidget> {
     setState(() {
       _selectedImage = null;
       _output = null;
+      hasImageSelected = false;
     });
   }
 
@@ -69,6 +62,7 @@ class _UserWidgetState extends State<UserWidget> {
     if (photo == null) return;
     setState(() {
       _selectedImage = photo;
+      hasImageSelected = true;
     });
     classifyImage();
   }
@@ -159,7 +153,11 @@ class _UserWidgetState extends State<UserWidget> {
                       ? SizedBox(
                           width: width,
                           height: width,
-                          child: Center(child: Image.asset('assets/logo.png')))
+                          child: Center(
+                            child: Image(
+                                image: FileImage(File(_selectedImage!.path)),
+                                fit: BoxFit.fill),
+                          ))
                       : SizedBox(
                           width: width,
                           height: width,
@@ -178,6 +176,27 @@ class _UserWidgetState extends State<UserWidget> {
                               ),
                             ],
                           )))),
+              const SizedBox(
+                height: 20,
+              ),
+              _output != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(9.0),
+                      child: Text(
+                        'Skin Cancer: ${_output["label"]}',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    )
+                  : Container(),
+              _output != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(9.0),
+                      child: Text(
+                        'Accuracy: ${_output["confidence"] * 100}%',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    )
+                  : Container(),
               Container(
                 margin: const EdgeInsets.only(top: 30),
                 child: Row(
