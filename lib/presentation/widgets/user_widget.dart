@@ -133,8 +133,8 @@ class _UserWidgetState extends State<UserWidget> {
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(7),
                           ))),
-                          child: const Text('Select from gallery'),
-                          onPressed: () {}),
+                          onPressed: () {},
+                          child: const Text('Select from gallery')),
                     ),
                     SizedBox(
                       width: width / 2.3,
