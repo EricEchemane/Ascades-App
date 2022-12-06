@@ -3,9 +3,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class UserWidget extends StatefulWidget {
   final GoogleSignInAccount user;
-  final GoogleSignInAccount identity;
 
-  const UserWidget({super.key, required this.user, required this.identity});
+  const UserWidget({super.key, required this.user});
 
   @override
   State<UserWidget> createState() => _UserWidgetState();
@@ -38,9 +37,9 @@ class _UserWidgetState extends State<UserWidget> {
                       ),
                     ]),
                 child: ListTile(
-                  leading: GoogleUserCircleAvatar(identity: widget.identity),
-                  title: Text(widget.identity.displayName!),
-                  subtitle: Text(widget.identity.email),
+                  leading: GoogleUserCircleAvatar(identity: widget.user),
+                  title: Text(widget.user.displayName!),
+                  subtitle: Text(widget.user.email),
                   trailing: IconButton(
                     icon: const Icon(Icons.menu),
                     onPressed: () {

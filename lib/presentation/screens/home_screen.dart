@@ -19,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     _googleSignIn.onCurrentUserChanged.listen((account) async {
-      if (account == null) return;
       _identity = account;
     });
     _googleSignIn.signInSilently();
@@ -40,9 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isAuthenticated = _identity != null;
-    return isAuthenticated
-        ? UserWidget(user: _identity!, identity: _identity!)
+    return _identity != null
+        ? UserWidget(user: _identity!)
         : Scaffold(
             appBar: AppBar(
               systemOverlayStyle: const SystemUiOverlayStyle(
