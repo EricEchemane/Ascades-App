@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ascades/presentation/screens/about_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
@@ -119,26 +120,27 @@ class _UserWidgetState extends State<UserWidget> {
                           ),
                           builder: (BuildContext context) {
                             return SizedBox(
-                              height: 160,
+                              height: 110,
                               child: Column(children: [
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 MaterialButton(
                                   minWidth: width,
-                                  height: 48,
-                                  onPressed: () {},
-                                  child: const Text('Home'),
-                                ),
-                                MaterialButton(
-                                  minWidth: width,
-                                  height: 48,
-                                  onPressed: () {},
+                                  height: 50,
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const AboutScreen()),
+                                    );
+                                  },
                                   child: const Text('About'),
                                 ),
                                 MaterialButton(
                                   minWidth: width,
-                                  height: 48,
+                                  height: 50,
                                   child: const Text('Sign out'),
                                   onPressed: widget.signOut,
                                 ),
