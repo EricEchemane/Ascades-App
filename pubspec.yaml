@@ -39,6 +39,7 @@ dependencies:
   google_sign_in: ^5.4.2
   image_picker: ^0.8.6
   tflite_flutter: ^0.9.0
+  image: ^3.2.2
 
 dev_dependencies:
   flutter_test:
