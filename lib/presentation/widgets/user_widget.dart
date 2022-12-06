@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:tflite/tflite.dart';
 
 class UserWidget extends StatefulWidget {
   final GoogleSignInAccount user;
@@ -12,6 +14,64 @@ class UserWidget extends StatefulWidget {
 
 class _UserWidgetState extends State<UserWidget> {
   bool hasImageSelected = false;
+  final ImagePicker _picker = ImagePicker();
+  XFile? _selectedImage;
+  dynamic _output;
+  bool notRecognized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    loadModel();
+  }
+
+  classifyImage() async {
+    var output = await Tflite.runModelOnImage(
+      path: _selectedImage!.path,
+      // imageMean: 0.0, // defaults to 117.0
+      // imageStd: 255.0, // defaults to 1.0
+      // numResults: 2, // defaults to 5
+      // threshold: 0.2, // defaults to 0.1
+    );
+    String label = output?[0]["label"];
+    double confidence = output?[0]["confidence"];
+
+    print(label);
+    print(confidence);
+    // setState(() {
+    //   _output = output?[0];
+    //   notRecognized = false;
+    // });
+  }
+
+  loadModel() async {
+    await Tflite.loadModel(
+      model: "assets/models/skin_cancer.tflite",
+      labels: "assets/labels/skin_cancer.txt",
+    );
+  }
+
+  @override
+  void dispose() {
+    Tflite.close();
+    super.dispose();
+  }
+
+  clearImage() {
+    setState(() {
+      _selectedImage = null;
+      _output = null;
+    });
+  }
+
+  Future pickFromGallery() async {
+    final XFile? photo = await _picker.pickImage(source: ImageSource.gallery);
+    if (photo == null) return;
+    setState(() {
+      _selectedImage = photo;
+    });
+    classifyImage();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +193,7 @@ class _UserWidgetState extends State<UserWidget> {
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(7),
                           ))),
-                          onPressed: () {},
+                          onPressed: pickFromGallery,
                           child: const Text('Select from gallery')),
                     ),
                     SizedBox(
@@ -147,7 +207,7 @@ class _UserWidgetState extends State<UserWidget> {
                             borderRadius: BorderRadius.circular(7),
                           ))),
                           child: const Text('Reset'),
-                          onPressed: () {}),
+                          onPressed: clearImage),
                     ),
                   ],
                 ),
